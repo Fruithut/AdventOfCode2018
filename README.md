@@ -1,4 +1,4 @@
-# AdventOfCode_2018
+# 🎄 Advent Of Code 2018 🎄
 Solutions to [Advent Of Code 2018](https://adventofcode.com/)
     
 | Day | Part | Language |
