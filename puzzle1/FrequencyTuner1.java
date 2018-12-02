@@ -10,6 +10,7 @@ public class FrequencyTuner1 {
         if (operator.equals("+")) return baseFreq + value;
         return baseFreq - value;
     }
+    
     public static void main(String[] args) {
         int changingFreq = 0;
 
