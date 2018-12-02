@@ -1,21 +1,18 @@
-inventory_file = open('input.txt', 'r', 1)
-inventory_list = inventory_file.read().splitlines()
-inventory_file.close()
+double_count = 0
+tripple_count = 0
 
-count_dict = {}
-for index, word in enumerate(inventory_list):
-    count_dict.update({index : {}})
+for index, word in enumerate(open('input.txt', 'r', 1)):
+    found_double = False
+    found_tripple = False
     for char in word:
         count = word.count(char)
-        count_dict[index].update({char : count})
+        if (found_double and found_tripple):
+                break
+        elif (count == 2 and not found_double):
+                found_double = True
+                double_count += 1
+        elif (count == 3 and not found_tripple):
+                found_tripple = True
+                tripple_count += 1
 
-two_kind = 0
-three_kind = 0
-for char_counts in count_dict.values():
-    count_list = char_counts.values()
-    if (2 in count_list): 
-        two_kind += 1
-    if (3 in count_list):
-        three_kind += 1
-
-print('Checksum:', two_kind * three_kind)
+print('Checksum:', double_count * tripple_count)
