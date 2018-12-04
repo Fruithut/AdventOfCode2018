@@ -1,5 +1,5 @@
-from collections import defaultdict
 import numpy
+from collections import defaultdict
 
 def getInput(file_path: str):
     file_content = []
@@ -7,36 +7,48 @@ def getInput(file_path: str):
         values = string.split(" ")
         first_pair = values[2].split(',')
         second_pair = values[3].split('x')
-        file_content.append({ 
-            'x_offset': int(first_pair[0]), 
-            'y_offset': int(first_pair[1][:-1]), 
-            'width': int(second_pair[0]), 
-            'height': int(second_pair[1][:-1])
-        })
+        file_content.append([
+            int(first_pair[0]), int(first_pair[1][:-1]), 
+            int(second_pair[0]), int(second_pair[1][:-1])
+        ])
     return file_content
 
-def generateHitMatrix(claim_specifications: [{}]):
-    claim_matrix = numpy.zeros((1000,1000))
-    for line in claim_specifications:
-        for x in range(line['x_offset'], line['x_offset'] + line['width']):
-            for y in range(line['y_offset'], line['y_offset'] + line['height']):
-                claim_matrix[x][y] += 1
-    return claim_matrix
-
-def countMultipleClaims(claim_matrix: numpy.ndarray):
-    claim_hits = 0
-    for i in claim_matrix:
-        for j in i:
-            if j > 1:
-                claim_hits += 1
-    return claim_hits
-
 # PART ONE
+def find_multiclaim(claim_specifications: [[]]):
+    claim_matrix = numpy.zeros((1000,1000))
+    for x, y, width, height in claim_specifications:
+        for x_offset in range(width):
+            for y_offset in range(height):
+                claim_matrix[x + x_offset][y + y_offset] += 1
+    return sum(map(lambda num: 1 if num > 1 else 0, numpy.nditer(claim_matrix)))
+
 contents = getInput('input.txt')
-hit_matrix = generateHitMatrix(contents)
-hits = countMultipleClaims(hit_matrix)
-print(hits)
+print(find_multiclaim(contents))
 
-# PART TWO
+# PART TWO TODO
+def checkOverlap(l1: tuple, r1:tuple, l2: tuple, r2:tuple):
+    if (l1[0] > r2[0] or l2[0] > r1[0]):
+        return False
+    if (l1[1] < r2[1] or l2[1] < r1[1]):
+        return False
+    return True
 
-    
+def find_non_overlapping(claim_specifications: [[]]):
+    id_hitlist = defaultdict(int)
+
+    for index1, (x, y, width, height) in enumerate(claim_specifications):
+        left_top1 = (x, y)
+        right_bottom1 = (x + width, y + height)
+        print(right_bottom1)
+
+        for index2, (x2, y2, width2, height2) in enumerate(claim_specifications, start = index1 + 1):
+            left_top2 = (x2, y2)
+            right_bottom2 = (x2 + width2, y2 + height2)
+
+            if checkOverlap(left_top1, right_bottom1, left_top2, right_bottom2):
+                id_hitlist[index1] += 1
+                id_hitlist[index2] += 1
+
+    # return {k: v for k, v in id_hitlist.items() if v < 1}
+
+# print(find_non_overlapping(contents))
