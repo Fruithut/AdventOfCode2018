@@ -1,11 +1,11 @@
 from difflib import SequenceMatcher
-from itertools import permutations
+from itertools import combinations
 
 a = ''
 b = ''
 largest_ratio = 0.0
 
-for perms in list(permutations(open('input.txt', 'r', 1), 2)):
+for perms in list(combinations(open('input.txt', 'r', 1), 2)):
     current_ratio = SequenceMatcher(None, perms[0], perms[1]).ratio()
     if (current_ratio > largest_ratio):
         largest_ratio = current_ratio
