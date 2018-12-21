@@ -1,20 +1,23 @@
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FrequencyTuner1 {
-    
     public static void main(String[] args) {
         int changingFreq = 0;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader("./puzzle1/input.txt"));) {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get("input.txt"));) {
             String input = reader.readLine();
-            while (input != null) {
+            while ((input = reader.readLine()) != null) {
                 changingFreq += Integer.valueOf(input);
                 input = reader.readLine();
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            for (Throwable t : e.getSuppressed()) {
+                t.printStackTrace();
+            }
         }
 
         System.out.println(changingFreq);

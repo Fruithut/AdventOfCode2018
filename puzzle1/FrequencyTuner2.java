@@ -1,16 +1,17 @@
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FrequencyTuner2 {
-
     public static void main(String[] args) {
         Map<Integer, Integer> countMap = new HashMap<>();
         int changingFreq = 0;
         countMap.put(changingFreq, 1);
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("./puzzle1/input.txt"));) {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get("input.txt"));) {
             String input = "";
             reader.mark(5000);
             while (true) {
@@ -27,8 +28,11 @@ public class FrequencyTuner2 {
 
                 countMap.put(changingFreq, timesSpotted);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            for (Throwable t : e.getSuppressed()) {
+                t.printStackTrace();
+            }
         }
 
         System.out.println(changingFreq);
