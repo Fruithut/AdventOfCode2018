@@ -8,10 +8,9 @@ public class FrequencyTuner1 {
     public static void main(String[] args) {
         int changingFreq = 0;
         try (BufferedReader reader = Files.newBufferedReader(Paths.get("input.txt"));) {
-            String input = reader.readLine();
+            String input;
             while ((input = reader.readLine()) != null) {
                 changingFreq += Integer.valueOf(input);
-                input = reader.readLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
