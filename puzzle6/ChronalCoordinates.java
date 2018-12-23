@@ -38,10 +38,9 @@ public class ChronalCoordinates {
     static void findMaximumField(int matrixSize, List<Coordinate> coordinates) {
         //Assumes matrix is large enough to contain all coordinates in input
         int[][] matrix = new int[matrixSize][matrixSize];
-        int matrixWidth = matrix.length, matrixHeight = matrix[0].length;
 
-        for (int i = 0; i < matrixWidth; i++) {
-            for (int j = 0; j < matrixHeight; j++) {
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < matrixSize; j++) {
                 int shortestDistance = Integer.MAX_VALUE;
 
                 for (Coordinate co : coordinates) {
@@ -58,16 +57,16 @@ public class ChronalCoordinates {
         }
 
         Set<Integer> edgeMembers = new HashSet<>();
-        for (int i = 0; i < matrixWidth; i++) {
-            edgeMembers.add(matrix[i][matrixWidth - 1]);
-            edgeMembers.add(matrix[matrixWidth - 1][i]);
+        for (int i = 0; i < matrixSize; i++) {
+            edgeMembers.add(matrix[i][matrixSize - 1]);
+            edgeMembers.add(matrix[matrixSize - 1][i]);
             edgeMembers.add(matrix[i][0]);
             edgeMembers.add(matrix[0][i]);
         }
 
         int[] sizeCount = new int[coordinates.size()];
-        for (int i = 0; i < matrixWidth; i++) {
-            for (int j = 0; j < matrixHeight; j++) {
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < matrixSize; j++) {
                 if (edgeMembers.contains(matrix[i][j])) continue;
                 sizeCount[matrix[i][j]] += 1;
             }
@@ -75,10 +74,27 @@ public class ChronalCoordinates {
         
         int max = Integer.MIN_VALUE;
         for (int x : sizeCount) if (x > max) max = x;
-        System.out.print(max);
+        System.out.println("Maximum size field: " + max);
+    }
+
+    //Part 2 solution
+    static void findSafeRegion(int safezone, int matrixSize, List<Coordinate> coordinates) {        
+        int safesize = 0;
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < matrixSize; j++) {
+                int totalDistance = 0;
+                for (Coordinate co : coordinates) {
+                    totalDistance += Math.abs(i - co.x) + Math.abs(co.y - j);
+                }
+                if (totalDistance < safezone) safesize++;
+            }
+        }
+        System.out.println("Maximum size safezone: " + safesize);
     }
     
     public static void main(String[] args) {
-        findMaximumField(400, getCoordinateInput());
+        List<Coordinate> coordinateList = getCoordinateInput();
+        findMaximumField(400, coordinateList);
+        findSafeRegion(10000, 400, coordinateList);
     }
 }
